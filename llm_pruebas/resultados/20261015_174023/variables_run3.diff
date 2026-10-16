@@ -1,0 +1,148 @@
+--- a/pysnooper/variables.py
++++ b/pysnooper/variables.py
+@@ -10,32 +10,52 @@
+ from . import pycompat
+ 
+ 
++_VARIABLE_FILENAME = '<variable>'
++
++
++def _compile_expression(source):
++    '''Compile `source` as an expression, the way watched variables are.'''
++    return compile(source, _VARIABLE_FILENAME, 'eval')
++
++
+ def needs_parentheses(source):
+-    def code(s):
+-        return compile(s, '<variable>', 'eval').co_code
++    '''Whether `source` must be wrapped in parentheses before appending to it.
+ 
+-    return code('{}.x'.format(source)) != code('({}).x'.format(source))
++    It compares the bytecode of `source.x` with that of `(source).x`. If they
++    differ, appending an attribute or index to `source` would apply only to
++    part of the expression (e.g. `a + b`), so parentheses are needed.
++    '''
++    def bytecode(expression):
++        return _compile_expression(expression).co_code
++
++    return bytecode('{}.x'.format(source)) != bytecode('({}).x'.format(source))
++
++
++def _parenthesize_if_needed(source):
++    if needs_parentheses(source):
++        return '({})'.format(source)
++    return source
+ 
+ 
+ class BaseVariable(pycompat.ABC):
+     def __init__(self, source, exclude=()):
+         self.source = source
+         self.exclude = utils.ensure_tuple(exclude)
+-        self.code = compile(source, '<variable>', 'eval')
+-        if needs_parentheses(source):
+-            self.unambiguous_source = '({})'.format(source)
+-        else:
+-            self.unambiguous_source = source
++        self.code = _compile_expression(source)
++        self.unambiguous_source = _parenthesize_if_needed(source)
+ 
+     def items(self, frame, normalize=False):
+         try:
+-            main_value = eval(self.code, frame.f_globals or {}, frame.f_locals)
++            main_value = self._evaluate(frame)
+         except Exception:
+             return ()
+         return self._items(main_value, normalize)
+ 
++    def _evaluate(self, frame):
++        return eval(self.code, frame.f_globals or {}, frame.f_locals)
++
+     @abc.abstractmethod
+-    def _items(self, key, normalize=False):
++    def _items(self, main_value, normalize=False):
+         raise NotImplementedError
+ 
+     @property
+@@ -47,12 +67,34 @@
+ 
+     def __eq__(self, other):
+         return (isinstance(other, BaseVariable) and
+-                                       self._fingerprint == other._fingerprint)
++                self._fingerprint == other._fingerprint)
+ 
+ 
+ class CommonVariable(BaseVariable):
++    '''Variable that reports its main value plus one entry per sub-key.
++
++    Subclasses define which keys exist (`_keys`), how a key is written next
++    to the source (`_format_key`) and how its value is obtained (`_get_value`).
++    '''
++
+     def _items(self, main_value, normalize=False):
+-        result = [(self.source, utils.get_shortish_repr(main_value, normalize=normalize))]
++        # Only the main value's repr is normalized; sub-values are not.
++        result = [
++            (self.source,
++             utils.get_shortish_repr(main_value, normalize=normalize))
++        ]
++        for key, value in self._safe_key_value_pairs(main_value):
++            result.append((
++                self._child_source(key),
++                utils.get_shortish_repr(value)
++            ))
++        return result
++
++    def _child_source(self, key):
++        return '{}{}'.format(self.unambiguous_source, self._format_key(key))
++
++    def _safe_key_value_pairs(self, main_value):
++        '''Yield `(key, value)` pairs, skipping excluded or failing keys.'''
+         for key in self._safe_keys(main_value):
+             try:
+                 if key in self.exclude:
+@@ -60,11 +102,7 @@
+                 value = self._get_value(main_value, key)
+             except Exception:
+                 continue
+-            result.append((
+-                '{}{}'.format(self.unambiguous_source, self._format_key(key)),
+-                utils.get_shortish_repr(value)
+-            ))
+-        return result
++            yield key, value
+ 
+     def _safe_keys(self, main_value):
+         try:
+@@ -116,18 +154,24 @@
+ 
+     def __getitem__(self, item):
+         assert isinstance(item, slice)
+-        result = deepcopy(self)
+-        result._slice = item
+-        return result
++        sliced_variable = deepcopy(self)
++        sliced_variable._slice = item
++        return sliced_variable
+ 
+ 
+ class Exploding(BaseVariable):
++    '''Variable that expands according to the kind of value it finds.'''
++
+     def _items(self, main_value, normalize=False):
++        variable_class = self._variable_class_for(main_value)
++        return variable_class(self.source, self.exclude)._items(main_value,
++                                                                normalize)
++
++    @staticmethod
++    def _variable_class_for(main_value):
+         if isinstance(main_value, Mapping):
+-            cls = Keys
++            return Keys
+         elif isinstance(main_value, Sequence):
+-            cls = Indices
++            return Indices
+         else:
+-            cls = Attrs
+-
+-        return cls(self.source, self.exclude)._items(main_value, normalize)
++            return Attrs

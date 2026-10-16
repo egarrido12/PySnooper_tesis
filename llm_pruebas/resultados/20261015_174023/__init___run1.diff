@@ -1,0 +1,25 @@
+--- a/pysnooper/__init__.py
++++ b/pysnooper/__init__.py
+@@ -17,14 +17,17 @@
+ For more information, see https://github.com/cool-RR/PySnooper
+ '''
+ 
++import collections
++
+ from .tracer import Tracer as snoop
+ from .variables import Attrs, Exploding, Indices, Keys
+-import collections
+ 
+-__VersionInfo = collections.namedtuple('VersionInfo',
+-                                       ('major', 'minor', 'micro'))
++_VersionInfo = collections.namedtuple('VersionInfo',
++                                      ('major', 'minor', 'micro'))
+ 
+ __version__ = '1.2.3'
+-__version_info__ = __VersionInfo(*(map(int, __version__.split('.'))))
++__version_info__ = _VersionInfo(*map(int, __version__.split('.')))
+ 
+-del collections, __VersionInfo # Avoid polluting the namespace
++# Los nombres auxiliares solo hacen falta para construir `__version_info__`;
++# los borramos para no exponerlos como atributos del paquete.
++del collections, _VersionInfo

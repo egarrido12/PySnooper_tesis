@@ -1,0 +1,125 @@
+--- a/pysnooper/pycompat.py
++++ b/pysnooper/pycompat.py
+@@ -11,6 +11,9 @@
+ PY3 = (sys.version_info[0] == 3)
+ PY2 = not PY3
+ 
++
++### Abstract base classes: ####################################################
++#                                                                             #
+ if hasattr(abc, 'ABC'):
+     ABC = abc.ABC
+ else:
+@@ -25,6 +28,10 @@
+ if hasattr(os, 'PathLike'):
+     PathLike = os.PathLike
+ else:
++    def _is_legacy_pathlib_class(cls):
++        '''Concession for older `pathlib` versions, which lack `__fspath__`.'''
++        return hasattr(cls, 'open') and 'path' in cls.__name__.lower()
++
+     class PathLike(ABC):
+         """Abstract base class for implementing the file system path protocol."""
+ 
+@@ -35,25 +42,27 @@
+ 
+         @classmethod
+         def __subclasshook__(cls, subclass):
+-            return (
+-                hasattr(subclass, '__fspath__') or
+-                # Make a concession for older `pathlib` versions:g
+-                (hasattr(subclass, 'open') and
+-                 'path' in subclass.__name__.lower())
+-            )
++            return (hasattr(subclass, '__fspath__') or
++                    _is_legacy_pathlib_class(subclass))
++#                                                                             #
++### Finished abstract base classes. ###########################################
+ 
+ 
+-try:
+-    iscoroutinefunction = inspect.iscoroutinefunction
+-except AttributeError:
+-    iscoroutinefunction = lambda whatever: False # Lolz
+-
+-try:
+-    isasyncgenfunction = inspect.isasyncgenfunction
+-except AttributeError:
+-    isasyncgenfunction = lambda whatever: False # Lolz
++### Function introspection: ###################################################
++#                                                                             #
++def _always_false(whatever):
++    '''Fallback for `inspect` predicates missing in old Python versions.'''
++    return False
+ 
+ 
++iscoroutinefunction = getattr(inspect, 'iscoroutinefunction', _always_false)
++isasyncgenfunction = getattr(inspect, 'isasyncgenfunction', _always_false)
++#                                                                             #
++### Finished function introspection. ##########################################
++
++
++### String types: #############################################################
++#                                                                             #
+ if PY3:
+     string_types = (str,)
+     text_type = str
+@@ -62,6 +71,8 @@
+     string_types = (basestring,)
+     text_type = unicode
+     binary_type = str
++#                                                                             #
++### Finished string types. ####################################################
+ 
+ 
+ try:
+@@ -69,30 +80,40 @@
+ except ImportError: # Python 2.7
+     import collections as collections_abc
+ 
++
++### Time formatting: ##########################################################
++#                                                                             #
+ if sys.version_info[:2] >= (3, 6):
+     time_isoformat = datetime_module.time.isoformat
+ else:
++    _MICROSECONDS_TIME_TEMPLATE = '{:02d}:{:02d}:{:02d}.{:06d}'
++    _MICROSECONDS_TIME_LENGTH = len('HH:MM:SS.ffffff')
++
+     def time_isoformat(time, timespec='microseconds'):
++        '''Backport of `datetime.time.isoformat`, only for microseconds.'''
+         assert isinstance(time, datetime_module.time)
+         if timespec != 'microseconds':
+             raise NotImplementedError
+-        result = '{:02d}:{:02d}:{:02d}.{:06d}'.format(
++        result = _MICROSECONDS_TIME_TEMPLATE.format(
+             time.hour, time.minute, time.second, time.microsecond
+         )
+-        assert len(result) == 15
++        assert len(result) == _MICROSECONDS_TIME_LENGTH
+         return result
+ 
+ 
+ def timedelta_format(timedelta):
+-    time = (datetime_module.datetime.min + timedelta).time()
+-    return time_isoformat(time, timespec='microseconds')
++    '''Format a `timedelta` as `HH:MM:SS.ffffff`.'''
++    time_of_day = (datetime_module.datetime.min + timedelta).time()
++    return time_isoformat(time_of_day, timespec='microseconds')
++
+ 
+ def timedelta_parse(s):
+-    hours, minutes, seconds, microseconds = map(
+-        int,
+-        s.replace('.', ':').split(':')
+-    )
++    '''Parse a `HH:MM:SS.ffffff` string into a `timedelta`.'''
++    colon_separated = s.replace('.', ':')
++    hours, minutes, seconds, microseconds = map(int,
++                                                colon_separated.split(':'))
+     return datetime_module.timedelta(hours=hours, minutes=minutes,
+                                      seconds=seconds,
+                                      microseconds=microseconds)
+-
++#                                                                             #
++### Finished time formatting. #################################################

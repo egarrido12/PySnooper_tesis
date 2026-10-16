@@ -1,0 +1,444 @@
+{
+  "python": "3.9.6",
+  "anthropic": "0.125.0",
+  "modelo": "claude-opus-5-5",
+  "effort": "high",
+  "prompt": "Eres un ingeniero de software experto en Python. Tu tarea es refactorizar un módulo del proyecto PySnooper para mejorar su legibilidad y mantenibilidad, sin cambiar su comportamiento.\n\nReglas:\n- El comportamiento observable debe ser idéntico al original.\n- No cambies los nombres ni las firmas de las funciones, clases y métodos públicos (los que no empiezan con \"_\"), porque otros módulos y los tests los usan.\n- No agregues funcionalidades nuevas ni dependencias.\n- Modifica solo el archivo indicado; el resto del paquete se muestra como contexto de solo lectura.\n- Mantén la compatibilidad con las versiones de Python que el proyecto ya soporta.\n\nFormato de respuesta:\n1. El archivo completo refactorizado, en un único bloque ```python.\n2. Después, una sección \"## Refactorizaciones aplicadas\" con una lista: tipo de refactorización (según el catálogo de Fowler, por ejemplo Extract Method, Rename Variable, Inline Function...), elementos afectados y motivo.\n",
+  "linea_base": {
+    "returncode": 0,
+    "passed": 83,
+    "failed": 0,
+    "skipped": 2,
+    "errors": 0
+  },
+  "determinismo": {
+    "__init__": {
+      "corridas": 3,
+      "diffs_distintos": 3
+    },
+    "pycompat": {
+      "corridas": 3,
+      "diffs_distintos": 3
+    },
+    "tracer": {
+      "corridas": 3,
+      "diffs_distintos": 3
+    },
+    "utils": {
+      "corridas": 3,
+      "diffs_distintos": 3
+    },
+    "variables": {
+      "corridas": 3,
+      "diffs_distintos": 3
+    }
+  },
+  "costo_total_usd": 2.5519,
+  "corridas": [
+    {
+      "id": "utils_run1",
+      "modulo": "utils",
+      "corrida": 1,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4pwrFFiqQqGcgdsL8xq",
+      "tiempo_llm_s": 43.9,
+      "tokens": {
+        "input": 27,
+        "output": 5143,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1055,
+      "lineas_agregadas": 105,
+      "lineas_eliminadas": 49,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "utils_run2",
+      "modulo": "utils",
+      "corrida": 2,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4q1B8QRgDRRQhePUsLe",
+      "tiempo_llm_s": 46.3,
+      "tokens": {
+        "input": 27,
+        "output": 5355,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1097,
+      "lineas_agregadas": 100,
+      "lineas_eliminadas": 45,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "utils_run3",
+      "modulo": "utils",
+      "corrida": 3,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4q4g81ATKwviY4sPuSu",
+      "tiempo_llm_s": 55.0,
+      "tokens": {
+        "input": 27,
+        "output": 6689,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1364,
+      "lineas_agregadas": 106,
+      "lineas_eliminadas": 48,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "variables_run1",
+      "modulo": "variables",
+      "corrida": 1,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4q8oqxbomF5oSQW6aQ1",
+      "tiempo_llm_s": 58.2,
+      "tokens": {
+        "input": 27,
+        "output": 6780,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1382,
+      "lineas_agregadas": 75,
+      "lineas_eliminadas": 31,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "variables_run2",
+      "modulo": "variables",
+      "corrida": 2,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4qDBhTUFetz8FQHyJxt",
+      "tiempo_llm_s": 51.0,
+      "tokens": {
+        "input": 27,
+        "output": 6124,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1251,
+      "lineas_agregadas": 68,
+      "lineas_eliminadas": 23,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "variables_run3",
+      "modulo": "variables",
+      "corrida": 3,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4qH2r1gzUCAUHGuo7kL",
+      "tiempo_llm_s": 53.0,
+      "tokens": {
+        "input": 27,
+        "output": 6276,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.1282,
+      "lineas_agregadas": 69,
+      "lineas_eliminadas": 25,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "tracer_run1",
+      "modulo": "tracer",
+      "corrida": 1,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4qM212mSDzXVKixwBMB",
+      "tiempo_llm_s": 185.6,
+      "tokens": {
+        "input": 28,
+        "output": 23892,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.4805,
+      "lineas_agregadas": 346,
+      "lineas_eliminadas": 277,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "tracer_run2",
+      "modulo": "tracer",
+      "corrida": 2,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4qaoCjJtTkpGv9XDdZc",
+      "tiempo_llm_s": 182.5,
+      "tokens": {
+        "input": 28,
+        "output": 23288,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.4684,
+      "lineas_agregadas": 345,
+      "lineas_eliminadas": 278,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "tracer_run3",
+      "modulo": "tracer",
+      "corrida": 3,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4qpLjQUC3tu3nejuBny",
+      "tiempo_llm_s": 142.1,
+      "tokens": {
+        "input": 28,
+        "output": 22343,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.4495,
+      "lineas_agregadas": 347,
+      "lineas_eliminadas": 272,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "pycompat_run1",
+      "modulo": "pycompat",
+      "corrida": 1,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4r6LL3iEuj2biUvpVk4",
+      "tiempo_llm_s": 41.9,
+      "tokens": {
+        "input": 29,
+        "output": 4764,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0979,
+      "lineas_agregadas": 62,
+      "lineas_eliminadas": 23,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "pycompat_run2",
+      "modulo": "pycompat",
+      "corrida": 2,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4r9WhUGCsktnJudZbWc",
+      "tiempo_llm_s": 38.5,
+      "tokens": {
+        "input": 29,
+        "output": 4521,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0931,
+      "lineas_agregadas": 45,
+      "lineas_eliminadas": 24,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "pycompat_run3",
+      "modulo": "pycompat",
+      "corrida": 3,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4rCRN5VWrtR5cbd4H3k",
+      "tiempo_llm_s": 30.8,
+      "tokens": {
+        "input": 29,
+        "output": 3552,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0737,
+      "lineas_agregadas": 34,
+      "lineas_eliminadas": 18,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "__init___run1",
+      "modulo": "__init__",
+      "corrida": 1,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4rEnKx1bSmKib7KUp8N",
+      "tiempo_llm_s": 21.3,
+      "tokens": {
+        "input": 28,
+        "output": 2225,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0471,
+      "lineas_agregadas": 8,
+      "lineas_eliminadas": 5,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "__init___run2",
+      "modulo": "__init__",
+      "corrida": 2,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4rGSpkNhVgMY5qhKWDU",
+      "tiempo_llm_s": 20.9,
+      "tokens": {
+        "input": 28,
+        "output": 2337,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0494,
+      "lineas_agregadas": 7,
+      "lineas_eliminadas": 6,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "__init___run3",
+      "modulo": "__init__",
+      "corrida": 3,
+      "modelo_respuesta": "claude-opus-5-5",
+      "stop_reason": "end_turn",
+      "message_id": "msg_011Cg4rJ4bpv846tB72FeoG2",
+      "tiempo_llm_s": 20.6,
+      "tokens": {
+        "input": 28,
+        "output": 2327,
+        "cache_write": 0,
+        "cache_read": 12636
+      },
+      "costo_usd": 0.0492,
+      "lineas_agregadas": 7,
+      "lineas_eliminadas": 5,
+      "sin_cambios": false,
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+# Copyright 2019 Ram Rachum and collaborators.
+# This program is distributed under the MIT license.
+
+import abc
+import re
+import traceback
+
+from .pycompat import ABC, string_types, collections_abc
+
+
+def _find_defining_class(cls, method_name):
+    '''Return the first class in `cls.__mro__` that defines `method_name`.
+
+    Return `None` if no class in the MRO defines it.
+    '''
+    for base in cls.__mro__:
+        if method_name in base.__dict__:
+            return base
+    return None
+
+
+def _check_methods(C, *methods):
+    '''Check that `C` implements every method in `methods`.
+
+    A method counts as not implemented if no class in the MRO defines it, or
+    if the first class that defines it sets it to `None`.
+    '''
+    for method_name in methods:
+        defining_class = _find_defining_class(C, method_name)
+        if defining_class is None or \
+                                  defining_class.__dict__[method_name] is None:
+            return NotImplemented
+    return True
+
+
+class WritableStream(ABC):
+    @abc.abstractmethod
+    def write(self, s):
+        pass
+
+    @classmethod
+    def __subclasshook__(cls, C):
+        if cls is WritableStream:
+            return _check_methods(C, 'write')
+        return NotImplemented
+
+
+file_reading_errors = (
+    IOError,
+    OSError,
+    ValueError # IronPython weirdness.
+)
+
+
+_REPLACEMENT_CHAR = '?'
+
+
+def _is_safe_char(char):
+    '''Whether `char` is a non-null Latin-1 character.'''
+    return 0 < ord(char) < 256
+
+
+def shitcode(s):
+    return ''.join(
+        char if _is_safe_char(char) else _REPLACEMENT_CHAR for char in s
+    )
+
+
+def _matches_condition(condition, item):
+    '''Whether `item` satisfies a `custom_repr` condition.
+
+    The condition can be a type (checked with `isinstance`) or a predicate.
+    '''
+    if isinstance(condition, type):
+        return isinstance(item, condition)
+    return condition(item)
+
+
+def get_repr_function(item, custom_repr):
+    for condition, action in custom_repr:
+        if _matches_condition(condition, item):
+            return action
+    return repr
+
+
+DEFAULT_REPR_RE = re.compile(r' at 0x[a-f0-9A-F]{4,}')
+
+
+def normalize_repr(item_repr):
+    """Remove memory address (0x...) from a default python repr"""
+    return DEFAULT_REPR_RE.sub('', item_repr)
+
+
+_REPR_FAILED_MESSAGE = 'REPR FAILED'
+
+
+def _safe_repr(repr_function, item):
+    '''Call `repr_function` on `item`, never letting an exception escape.'''
+    try:
+        return repr_function(item)
+    except Exception:
+        return _REPR_FAILED_MESSAGE
+
+
+def _remove_line_breaks(string):
+    return string.replace('\r', '').replace('\n', '')
+
+
+def get_shortish_repr(item, custom_repr=(), max_length=None, normalize=False):
+    repr_function = get_repr_function(item, custom_repr)
+    item_repr = _remove_line_breaks(_safe_repr(repr_function, item))
+    if normalize:
+        item_repr = normalize_repr(item_repr)
+    if max_length:
+        item_repr = truncate(item_repr, max_length)
+    return item_repr
+
+
+_ELLIPSIS = u'...'
+
+
+def truncate(string, max_length):
+    if (max_length is None) or (len(string) <= max_length):
+        return string
+    available_length = max_length - len(_ELLIPSIS)
+    left_length = available_length // 2
+    right_length = available_length - left_length
+    return u'{}{}{}'.format(string[:left_length], _ELLIPSIS,
+                            string[-right_length:])
+
+
+def _is_exception_group(exc_value):
+    '''Whether `exc_value` is an exception group.
+
+    `BaseExceptionGroup` only exists in Python 3.11+, so on older versions
+    this always returns `False`.
+    '''
+    try:
+        return isinstance(exc_value, BaseExceptionGroup)
+    except NameError:
+        return False
+
+
+def _format_exception_group(exc_type, exc_value):
+    sub_exceptions = exc_value.exceptions
+    sub_types = ', '.join(type(e).__name__ for e in sub_exceptions)
+    message = exc_value.args[0] if exc_value.args else ''
+    return u"{}: '{}' ({} sub-exceptions: {})".format(
+        exc_type.__name__, message, len(sub_exceptions), sub_types,
+    )
+
+
+def format_exception(exc_type, exc_value):
+    if _is_exception_group(exc_value):
+        return _format_exception_group(exc_type, exc_value)
+    return u'\n'.join(
+        traceback.format_exception_only(exc_type, exc_value)
+    ).strip()
+
+
+def _is_non_string_iterable(x):
+    return isinstance(x, collections_abc.Iterable) and \
+                                               not isinstance(x, string_types)
+
+
+def ensure_tuple(x):
+    if _is_non_string_iterable(x):
+        return tuple(x)
+    return (x,)
