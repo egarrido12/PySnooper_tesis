@@ -1,0 +1,3048 @@
+F....F.F..FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF..FFFFFFFF.FFFFFFF.FFFFFFFF [ 84%]
+FFFF.ss.FFF..                                                            [100%]
+=================================== FAILURES ===================================
+_________________________________ test_chinese _________________________________
+
+    def test_chinese():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder:
+            path = folder / 'foo.log'
+            @pysnooper.snoop(path, color=False)
+            def foo():
+                a = 1
+                x = '失败'
+                return 7
+    
+>           foo()
+
+tests/test_chinese.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_chinese.py:32: in foo
+    x = '失败'
+tests/test_chinese.py:32: in foo
+    x = '失败'
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1036778e0>
+local_reprs = OrderedDict([('a', '1')]), old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________ test_unstarted_generator_close_is_not_an_exception ______________
+
+    def test_unstarted_generator_close_is_not_an_exception():
+        string_io = io.StringIO()
+    
+        def gen(n):
+            for i in range(n):
+                yield i
+    
+        @pysnooper.snoop(string_io, depth=2, color=False)
+        def main():
+            g = gen(5)
+            g.close()
+            return 42
+    
+>       assert main() == 42
+
+tests/test_ended_by_exception.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_ended_by_exception.py:53: in main
+    @pysnooper.snoop(string_io, depth=2, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1039c0820>
+local_reprs = OrderedDict([('gen', '<function test_unstarted_generator_close_is_not_an_exception.<locals>.gen at 0x1039cfe50>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_multiple_files ______________________________
+
+    def test_multiple_files():
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = foo.foo_function()
+
+tests/test_multiple_files/test_multiple_files.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_multiple_files/multiple_files/foo.py:10: in foo_function
+    z = bar_function(3)
+tests/test_multiple_files/multiple_files/bar.py:4: in bar_function
+    def bar_function(y):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1039300d0>
+local_reprs = OrderedDict([('y', '3')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________________ test_string_io ________________________________
+
+    def test_string_io():
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, color=False)
+        def my_function(foo):
+            x = 7
+            y = 8
+            return y + x
+    
+>       result = my_function('baba')
+
+tests/test_pysnooper.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:29: in my_function
+    @pysnooper.snoop(string_io, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a90100>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_relative_time ______________________________
+
+    def test_relative_time():
+        snoop = pysnooper.snoop(relative_time=True, color=False)
+    
+        def foo(x):
+            if x == 0:
+                bar1(x)
+                qux()
+                return
+    
+            with snoop:
+                # There should be line entries for these three lines,
+                # no line entries for anything else in this function,
+                # but calls to all bar functions should be traced
+                foo(x - 1)
+                bar2(x)
+                qux()
+            int(4)
+            bar3(9)
+            return x
+    
+        @snoop
+        def bar1(_x):
+            qux()
+    
+        @snoop
+        def bar2(_x):
+            qux()
+    
+        @snoop
+        def bar3(_x):
+            qux()
+    
+        def qux():
+            time.sleep(0.1)
+            return 9  # not traced, mustn't show up
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = foo(2)
+
+tests/test_pysnooper.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:69: in foo
+    foo(x - 1)
+tests/test_pysnooper.py:69: in foo
+    foo(x - 1)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b777c0>
+local_reprs = OrderedDict([('x', '2'), ('bar1', '<function test_relative_time.<locals>.bar1 at 0x103958a60>'), ('bar2', '<function t...ction test_relative_time.<locals>.qux at 0x103a0eca0>'), ('snoop', '<pysnooper.tracer.Tracer object at 0x103b777c0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________________ test_thread_info _______________________________
+
+    def test_thread_info():
+    
+        @pysnooper.snoop(thread_info=True, color=False)
+        def my_function(foo):
+            x = 7
+            y = 8
+            return y + x
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function('baba')
+
+tests/test_pysnooper.py:198: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:190: in my_function
+    @pysnooper.snoop(thread_info=True, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b0b730>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_multi_thread_info ____________________________
+
+    def test_multi_thread_info():
+    
+        @pysnooper.snoop(thread_info=True, color=False)
+        def my_function(foo):
+            x = 7
+            y = 8
+            return y + x
+    
+        def parse_call_content(line):
+            return line.split('{event:9} '.format(event='call'))[-1]
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           my_function('baba')
+
+tests/test_pysnooper.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:221: in my_function
+    @pysnooper.snoop(thread_info=True, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a91ac0>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_callable[True] ______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_callable(normalize):
+        string_io = io.StringIO()
+    
+        def write(msg):
+            string_io.write(msg)
+    
+        @pysnooper.snoop(write, normalize=normalize, color=False)
+        def my_function(foo):
+            x = 7
+            y = 8
+            return y + x
+    
+>       result = my_function('baba')
+
+tests/test_pysnooper.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:310: in my_function
+    @pysnooper.snoop(write, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103993af0>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_callable[False] _____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_callable(normalize):
+        string_io = io.StringIO()
+    
+        def write(msg):
+            string_io.write(msg)
+    
+        @pysnooper.snoop(write, normalize=normalize, color=False)
+        def my_function(foo):
+            x = 7
+            y = 8
+            return y + x
+    
+>       result = my_function('baba')
+
+tests/test_pysnooper.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:310: in my_function
+    @pysnooper.snoop(write, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a24820>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________________ test_watch[True] _______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_watch(normalize):
+        class Foo(object):
+            def __init__(self):
+                self.x = 2
+    
+            def square(self):
+                self.x **= 2
+    
+        @pysnooper.snoop(watch=(
+                'foo.x',
+                'io.__name__',
+                'len(foo.__dict__["x"] * "abc")',
+        ), normalize=normalize, color=False)
+        def my_function():
+            foo = Foo()
+            for i in range(2):
+                foo.square()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:359: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:347: in my_function
+    @pysnooper.snoop(watch=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b420a0>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_watch.<locals>.Foo'>"), ('io.__name__', "'io'")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_watch[False] _______________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_watch(normalize):
+        class Foo(object):
+            def __init__(self):
+                self.x = 2
+    
+            def square(self):
+                self.x **= 2
+    
+        @pysnooper.snoop(watch=(
+                'foo.x',
+                'io.__name__',
+                'len(foo.__dict__["x"] * "abc")',
+        ), normalize=normalize, color=False)
+        def my_function():
+            foo = Foo()
+            for i in range(2):
+                foo.square()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:359: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:347: in my_function
+    @pysnooper.snoop(watch=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103677f70>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_watch.<locals>.Foo'>"), ('io.__name__', "'io'")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________________ test_watch_explode[True] ___________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_watch_explode(normalize):
+        class Foo:
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+    
+        @pysnooper.snoop(watch_explode=('_d', '_point', 'lst + []'), normalize=normalize,
+                         color=False)
+        def my_function():
+            _d = {'a': 1, 'b': 2, 'c': 'ignore'}
+            _point = Foo(x=3, y=4)
+            lst = [7, 8, 9]
+            lst.append(10)
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:409: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:399: in my_function
+    @pysnooper.snoop(watch_explode=('_d', '_point', 'lst + []'), normalize=normalize,
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c1d490>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_watch_explode.<locals>.Foo'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________________________ test_watch_explode[False] ___________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_watch_explode(normalize):
+        class Foo:
+            def __init__(self, x, y):
+                self.x = x
+                self.y = y
+    
+        @pysnooper.snoop(watch_explode=('_d', '_point', 'lst + []'), normalize=normalize,
+                         color=False)
+        def my_function():
+            _d = {'a': 1, 'b': 2, 'c': 'ignore'}
+            _point = Foo(x=3, y=4)
+            lst = [7, 8, 9]
+            lst.append(10)
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:409: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:399: in my_function
+    @pysnooper.snoop(watch_explode=('_d', '_point', 'lst + []'), normalize=normalize,
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a457f0>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_watch_explode.<locals>.Foo'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________________________ test_variables_classes[True] _________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_variables_classes(normalize):
+        class WithSlots(object):
+            __slots__ = ('x', 'y')
+    
+            def __init__(self):
+                self.x = 3
+                self.y = 4
+    
+        @pysnooper.snoop(watch=(
+                pysnooper.Keys('_d', exclude='c'),
+                pysnooper.Attrs('_d'),  # doesn't have attributes
+                pysnooper.Attrs('_s'),
+                pysnooper.Indices('_lst')[-3:],
+        ), normalize=normalize, color=False)
+        def my_function():
+            _d = {'a': 1, 'b': 2, 'c': 'ignore'}
+            _s = WithSlots()
+            _lst = list(range(1000))
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:467: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:454: in my_function
+    @pysnooper.snoop(watch=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cda790>
+local_reprs = OrderedDict([('WithSlots', "<class 'tests.test_pysnooper.test_variables_classes.<locals>.WithSlots'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________ test_variables_classes[False] _________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_variables_classes(normalize):
+        class WithSlots(object):
+            __slots__ = ('x', 'y')
+    
+            def __init__(self):
+                self.x = 3
+                self.y = 4
+    
+        @pysnooper.snoop(watch=(
+                pysnooper.Keys('_d', exclude='c'),
+                pysnooper.Attrs('_d'),  # doesn't have attributes
+                pysnooper.Attrs('_s'),
+                pysnooper.Indices('_lst')[-3:],
+        ), normalize=normalize, color=False)
+        def my_function():
+            _d = {'a': 1, 'b': 2, 'c': 'ignore'}
+            _s = WithSlots()
+            _lst = list(range(1000))
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:467: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:454: in my_function
+    @pysnooper.snoop(watch=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c2bd00>
+local_reprs = OrderedDict([('WithSlots', "<class 'tests.test_pysnooper.test_variables_classes.<locals>.WithSlots'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________ test_single_watch_no_comma[True] _______________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_single_watch_no_comma(normalize):
+        class Foo(object):
+            def __init__(self):
+                self.x = 2
+    
+            def square(self):
+                self.x **= 2
+    
+        @pysnooper.snoop(watch='foo', normalize=normalize, color=False)
+        def my_function():
+            foo = Foo()
+            for i in range(2):
+                foo.square()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:514: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:506: in my_function
+    @pysnooper.snoop(watch='foo', normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a3cac0>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_single_watch_no_comma.<locals>.Foo'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________ test_single_watch_no_comma[False] _______________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_single_watch_no_comma(normalize):
+        class Foo(object):
+            def __init__(self):
+                self.x = 2
+    
+            def square(self):
+                self.x **= 2
+    
+        @pysnooper.snoop(watch='foo', normalize=normalize, color=False)
+        def my_function():
+            foo = Foo()
+            for i in range(2):
+                foo.square()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:514: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:506: in my_function
+    @pysnooper.snoop(watch='foo', normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b0b640>
+local_reprs = OrderedDict([('Foo', "<class 'tests.test_pysnooper.test_single_watch_no_comma.<locals>.Foo'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________________ test_long_variable[True] ___________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable(normalize):
+        @pysnooper.snoop(normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:545: in my_function
+    return foo
+tests/test_pysnooper.py:545: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a686d0>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1...990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________________________ test_long_variable[False] ___________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable(normalize):
+        @pysnooper.snoop(normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:549: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:545: in my_function
+    return foo
+tests/test_pysnooper.py:545: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103aa1070>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1...990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________ test_long_variable_with_custom_max_variable_length[True] ___________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable_with_custom_max_variable_length(normalize):
+        @pysnooper.snoop(max_variable_length=200, normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:578: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:574: in my_function
+    return foo
+tests/test_pysnooper.py:574: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cc00a0>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,...980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________ test_long_variable_with_custom_max_variable_length[False] ___________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable_with_custom_max_variable_length(normalize):
+        @pysnooper.snoop(max_variable_length=200, normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:578: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:574: in my_function
+    return foo
+tests/test_pysnooper.py:574: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c1d0a0>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,...980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________ test_long_variable_with_infinite_max_variable_length[True] __________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable_with_infinite_max_variable_length(normalize):
+        @pysnooper.snoop(max_variable_length=None, normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:607: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:603: in my_function
+    return foo
+tests/test_pysnooper.py:603: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103993c70>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 2... 977, 978, 979, 980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________ test_long_variable_with_infinite_max_variable_length[False] __________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_long_variable_with_infinite_max_variable_length(normalize):
+        @pysnooper.snoop(max_variable_length=None, normalize=normalize, color=False)
+        def my_function():
+            foo = list(range(1000))
+            return foo
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:607: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:603: in my_function
+    return foo
+tests/test_pysnooper.py:603: in my_function
+    return foo
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a90160>
+local_reprs = OrderedDict([('foo', '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 2... 977, 978, 979, 980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999]')])
+old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________________________ test_repr_exception[True] ___________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_repr_exception(normalize):
+        class Bad(object):
+            def __repr__(self):
+                1 / 0
+    
+        @pysnooper.snoop(normalize=normalize, color=False)
+        def my_function():
+            bad = Bad()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:639: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:633: in my_function
+    @pysnooper.snoop(normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1039c35e0>
+local_reprs = OrderedDict([('Bad', "<class 'tests.test_pysnooper.test_repr_exception.<locals>.Bad'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________________________ test_repr_exception[False] __________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_repr_exception(normalize):
+        class Bad(object):
+            def __repr__(self):
+                1 / 0
+    
+        @pysnooper.snoop(normalize=normalize, color=False)
+        def my_function():
+            bad = Bad()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = my_function()
+
+tests/test_pysnooper.py:639: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:633: in my_function
+    @pysnooper.snoop(normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103aa1fd0>
+local_reprs = OrderedDict([('Bad', "<class 'tests.test_pysnooper.test_repr_exception.<locals>.Bad'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________________ test_depth[True] _______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_depth(normalize):
+        string_io = io.StringIO()
+    
+        def f4(x4):
+            result4 = x4 * 2
+            return result4
+    
+        def f3(x3):
+            result3 = f4(x3)
+            return result3
+    
+        def f2(x2):
+            result2 = f3(x2)
+            return result2
+    
+        @pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False)
+        def f1(x1):
+            result1 = f2(x1)
+            return result1
+    
+>       result = f1(10)
+
+tests/test_pysnooper.py:679: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:674: in f1
+    @pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b0b850>
+local_reprs = OrderedDict([('x1', '10'), ('f2', '<function test_depth.<locals>.f2>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_depth[False] _______________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_depth(normalize):
+        string_io = io.StringIO()
+    
+        def f4(x4):
+            result4 = x4 * 2
+            return result4
+    
+        def f3(x3):
+            result3 = f4(x3)
+            return result3
+    
+        def f2(x2):
+            result2 = f3(x2)
+            return result2
+    
+        @pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False)
+        def f1(x1):
+            result1 = f2(x1)
+            return result1
+    
+>       result = f1(10)
+
+tests/test_pysnooper.py:679: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:674: in f1
+    @pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cd9fd0>
+local_reprs = OrderedDict([('x1', '10'), ('f2', '<function test_depth.<locals>.f2 at 0x103a0eee0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________________________ test_method_and_prefix[True] _________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_method_and_prefix(normalize):
+        class Baz(object):
+            def __init__(self):
+                self.x = 2
+    
+            @pysnooper.snoop(watch=('self.x',), prefix='ZZZ', normalize=normalize,
+                             color=False)
+            def square(self):
+                foo = 7
+                self.x **= 2
+                return self
+    
+        baz = Baz()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = baz.square()
+
+tests/test_pysnooper.py:738: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:727: in square
+    @pysnooper.snoop(watch=('self.x',), prefix='ZZZ', normalize=normalize,
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c1d850>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_method_and_prefix.<locals>.Baz object>'), ('self.x', '2')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________ test_method_and_prefix[False] _________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_method_and_prefix(normalize):
+        class Baz(object):
+            def __init__(self):
+                self.x = 2
+    
+            @pysnooper.snoop(watch=('self.x',), prefix='ZZZ', normalize=normalize,
+                             color=False)
+            def square(self):
+                foo = 7
+                self.x **= 2
+                return self
+    
+        baz = Baz()
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = baz.square()
+
+tests/test_pysnooper.py:738: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:727: in square
+    @pysnooper.snoop(watch=('self.x',), prefix='ZZZ', normalize=normalize,
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b08100>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_method_and_prefix.<locals>.Baz object at 0x103b089a0>'), ('self.x', '2')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_file_output[True] ____________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_file_output(normalize):
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder:
+            path = folder / 'foo.log'
+    
+            @pysnooper.snoop(path, normalize=normalize, color=False)
+            def my_function(_foo):
+                x = 7
+                y = 8
+                return y + x
+    
+>           result = my_function('baba')
+
+tests/test_pysnooper.py:774: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:768: in my_function
+    @pysnooper.snoop(path, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a365e0>
+local_reprs = OrderedDict([('_foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________________ test_file_output[False] ____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_file_output(normalize):
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder:
+            path = folder / 'foo.log'
+    
+            @pysnooper.snoop(path, normalize=normalize, color=False)
+            def my_function(_foo):
+                x = 7
+                y = 8
+                return y + x
+    
+>           result = my_function('baba')
+
+tests/test_pysnooper.py:774: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:768: in my_function
+    @pysnooper.snoop(path, normalize=normalize, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x10368d340>
+local_reprs = OrderedDict([('_foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________ test_confusing_decorator_lines[True] _____________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_confusing_decorator_lines(normalize):
+        string_io = io.StringIO()
+    
+        def empty_decorator(function):
+            return function
+    
+        @empty_decorator
+        @pysnooper.snoop(string_io, normalize=normalize,
+                         depth=2, color=False)
+        @empty_decorator
+        @empty_decorator
+        def my_function(foo):
+            x = lambda bar: 7
+            y = 8
+            return y + x(foo)
+    
+>       result = my_function('baba')
+
+tests/test_pysnooper.py:814: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:804: in my_function
+    @empty_decorator
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b252e0>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________ test_confusing_decorator_lines[False] _____________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_confusing_decorator_lines(normalize):
+        string_io = io.StringIO()
+    
+        def empty_decorator(function):
+            return function
+    
+        @empty_decorator
+        @pysnooper.snoop(string_io, normalize=normalize,
+                         depth=2, color=False)
+        @empty_decorator
+        @empty_decorator
+        def my_function(foo):
+            x = lambda bar: 7
+            y = 8
+            return y + x(foo)
+    
+>       result = my_function('baba')
+
+tests/test_pysnooper.py:814: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:804: in my_function
+    @empty_decorator
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cd9550>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_lambda[True] _______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_lambda(normalize):
+        string_io = io.StringIO()
+        my_function = pysnooper.snoop(string_io, normalize=normalize, color=False)(lambda x: x ** 2)
+>       result = my_function(7)
+
+tests/test_pysnooper.py:847: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:846: in <lambda>
+    my_function = pysnooper.snoop(string_io, normalize=normalize, color=False)(lambda x: x ** 2)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a3e580>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_lambda[False] ______________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_lambda(normalize):
+        string_io = io.StringIO()
+        my_function = pysnooper.snoop(string_io, normalize=normalize, color=False)(lambda x: x ** 2)
+>       result = my_function(7)
+
+tests/test_pysnooper.py:847: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:846: in <lambda>
+    my_function = pysnooper.snoop(string_io, normalize=normalize, color=False)(lambda x: x ** 2)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103afeaf0>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________________ test_unavailable_source ____________________________
+
+    def test_unavailable_source():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder, \
+                                        mini_toolbox.TempSysPathAdder(str(folder)):
+            module_name = 'iaerojajsijf'
+            python_file_path = folder / ('%s.py' % (module_name,))
+            content = textwrap.dedent(u'''
+                import pysnooper
+                @pysnooper.snoop(color=False)
+                def f(x):
+                    return x
+            ''')
+            with python_file_path.open('w') as python_file:
+                python_file.write(content)
+            module = __import__(module_name)
+            python_file_path.unlink()
+            with mini_toolbox.OutputCapturer(stdout=False,
+                                             stderr=True) as output_capturer:
+>               result = getattr(module, 'f')(7)
+
+tests/test_pysnooper.py:882: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+/var/folders/k_/fsm668d93fnc6932cv0ykpbh0000gn/T/pysnooperfyrhnp59/iaerojajsijf.py:3: in f
+    ???
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103bae6d0>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________________________ test_no_overwrite_by_default _________________________
+
+    def test_no_overwrite_by_default():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder:
+            path = folder / 'foo.log'
+            with path.open('w') as output_file:
+                output_file.write(u'lala')
+            @pysnooper.snoop(str(path), color=False)
+            def my_function(foo):
+                x = 7
+                y = 8
+                return y + x
+>           result = my_function('baba')
+
+tests/test_pysnooper.py:909: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:904: in my_function
+    @pysnooper.snoop(str(path), color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cb4f70>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________________ test_overwrite ________________________________
+
+    def test_overwrite():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder:
+            path = folder / 'foo.log'
+            with path.open('w') as output_file:
+                output_file.write(u'lala')
+            @pysnooper.snoop(str(path), overwrite=True, color=False)
+            def my_function(foo):
+                x = 7
+                y = 8
+                return y + x
+>           result = my_function('baba')
+
+tests/test_pysnooper.py:943: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:938: in my_function
+    @pysnooper.snoop(str(path), overwrite=True, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a90f70>
+local_reprs = OrderedDict([('foo', "'baba'")]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_with_block[True] _____________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_with_block(normalize):
+        # Testing that a single Tracer can handle many mixed uses
+        snoop = pysnooper.snoop(normalize=normalize, color=False)
+    
+        def foo(x):
+            if x == 0:
+                bar1(x)
+                qux()
+                return
+    
+            with snoop:
+                # There should be line entries for these three lines,
+                # no line entries for anything else in this function,
+                # but calls to all bar functions should be traced
+                foo(x - 1)
+                bar2(x)
+                qux()
+            int(4)
+            bar3(9)
+            return x
+    
+        @snoop
+        def bar1(_x):
+            qux()
+    
+        @snoop
+        def bar2(_x):
+            qux()
+    
+        @snoop
+        def bar3(_x):
+            qux()
+    
+        def qux():
+            return 9  # not traced, mustn't show up
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = foo(2)
+
+tests/test_pysnooper.py:1044: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1020: in foo
+    foo(x - 1)
+tests/test_pysnooper.py:1020: in foo
+    foo(x - 1)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c9b820>
+local_reprs = OrderedDict([('x', '2'), ('bar1', '<function test_with_block.<locals>.bar1>'), ('bar2', '<function test_with_block.<lo...ck.<locals>.foo>'), ('qux', '<function test_with_block.<locals>.qux>'), ('snoop', '<pysnooper.tracer.Tracer object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_with_block[False] ____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_with_block(normalize):
+        # Testing that a single Tracer can handle many mixed uses
+        snoop = pysnooper.snoop(normalize=normalize, color=False)
+    
+        def foo(x):
+            if x == 0:
+                bar1(x)
+                qux()
+                return
+    
+            with snoop:
+                # There should be line entries for these three lines,
+                # no line entries for anything else in this function,
+                # but calls to all bar functions should be traced
+                foo(x - 1)
+                bar2(x)
+                qux()
+            int(4)
+            bar3(9)
+            return x
+    
+        @snoop
+        def bar1(_x):
+            qux()
+    
+        @snoop
+        def bar2(_x):
+            qux()
+    
+        @snoop
+        def bar3(_x):
+            qux()
+    
+        def qux():
+            return 9  # not traced, mustn't show up
+    
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+>           result = foo(2)
+
+tests/test_pysnooper.py:1044: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1020: in foo
+    foo(x - 1)
+tests/test_pysnooper.py:1020: in foo
+    foo(x - 1)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103952c70>
+local_reprs = OrderedDict([('x', '2'), ('bar1', '<function test_with_block.<locals>.bar1 at 0x103a0ea60>'), ('bar2', '<function test...function test_with_block.<locals>.qux at 0x103a28c10>'), ('snoop', '<pysnooper.tracer.Tracer object at 0x103952c70>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________________________ test_with_block_depth[True] __________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_with_block_depth(normalize):
+        string_io = io.StringIO()
+    
+        def f4(x4):
+            result4 = x4 * 2
+            return result4
+    
+        def f3(x3):
+            result3 = f4(x3)
+            return result3
+    
+        def f2(x2):
+            result2 = f3(x2)
+            return result2
+    
+        def f1(x1):
+            str(3)
+            with pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False):
+                result1 = f2(x1)
+            return result1
+    
+>       result = f1(10)
+
+tests/test_pysnooper.py:1161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1158: in f1
+    result1 = f2(x1)
+tests/test_pysnooper.py:1158: in f1
+    result1 = f2(x1)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a61af0>
+local_reprs = OrderedDict([('x1', '10'), ('f2', '<function test_with_block_depth.<locals>.f2>'), ('normalize', 'True'), ('string_io', '<_io.StringIO object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_________________________ test_with_block_depth[False] _________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_with_block_depth(normalize):
+        string_io = io.StringIO()
+    
+        def f4(x4):
+            result4 = x4 * 2
+            return result4
+    
+        def f3(x3):
+            result3 = f4(x3)
+            return result3
+    
+        def f2(x2):
+            result2 = f3(x2)
+            return result2
+    
+        def f1(x1):
+            str(3)
+            with pysnooper.snoop(string_io, depth=3, normalize=normalize, color=False):
+                result1 = f2(x1)
+            return result1
+    
+>       result = f1(10)
+
+tests/test_pysnooper.py:1161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1158: in f1
+    result1 = f2(x1)
+tests/test_pysnooper.py:1158: in f1
+    result1 = f2(x1)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a91eb0>
+local_reprs = OrderedDict([('x1', '10'), ('f2', '<function test_with_block_depth.<locals>.f2 at 0x103a40040>'), ('normalize', 'False'), ('string_io', '<_io.StringIO object at 0x103a28670>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_cellvars[True] ______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_cellvars(normalize):
+        string_io = io.StringIO()
+    
+        def f2(a):
+            def f3(a):
+                x = 0
+                x += 1
+                def f4(a):
+                    y = x
+                    return 42
+                return f4(a)
+            return f3(a)
+    
+        def f1(a):
+            with pysnooper.snoop(string_io, depth=4, normalize=normalize, color=False):
+                result1 = f2(a)
+            return result1
+    
+>       result = f1(42)
+
+tests/test_pysnooper.py:1220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1217: in f1
+    result1 = f2(a)
+tests/test_pysnooper.py:1217: in f1
+    result1 = f2(a)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a3cc40>
+local_reprs = OrderedDict([('a', '42'), ('f2', '<function test_cellvars.<locals>.f2>'), ('normalize', 'True'), ('string_io', '<_io.StringIO object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_cellvars[False] _____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_cellvars(normalize):
+        string_io = io.StringIO()
+    
+        def f2(a):
+            def f3(a):
+                x = 0
+                x += 1
+                def f4(a):
+                    y = x
+                    return 42
+                return f4(a)
+            return f3(a)
+    
+        def f1(a):
+            with pysnooper.snoop(string_io, depth=4, normalize=normalize, color=False):
+                result1 = f2(a)
+            return result1
+    
+>       result = f1(42)
+
+tests/test_pysnooper.py:1220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1217: in f1
+    result1 = f2(a)
+tests/test_pysnooper.py:1217: in f1
+    result1 = f2(a)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103afeeb0>
+local_reprs = OrderedDict([('a', '42'), ('f2', '<function test_cellvars.<locals>.f2 at 0x103a403a0>'), ('normalize', 'False'), ('string_io', '<_io.StringIO object at 0x103a405e0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_var_order[True] _____________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_var_order(normalize):
+        string_io = io.StringIO()
+    
+        def f(one, two, three, four):
+            five = None
+            six = None
+            seven = None
+    
+            five, six, seven = 5, 6, 7
+    
+        with pysnooper.snoop(string_io, depth=2, normalize=normalize, color=False):
+>           result = f(1, 2, 3, 4)
+
+tests/test_pysnooper.py:1282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1282: in test_var_order
+    result = f(1, 2, 3, 4)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cd9640>
+local_reprs = OrderedDict([('normalize', 'True'), ('string_io', '<_io.StringIO object>'), ('f', '<function test_var_order.<locals>.f>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_var_order[False] _____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_var_order(normalize):
+        string_io = io.StringIO()
+    
+        def f(one, two, three, four):
+            five = None
+            six = None
+            seven = None
+    
+            five, six, seven = 5, 6, 7
+    
+        with pysnooper.snoop(string_io, depth=2, normalize=normalize, color=False):
+>           result = f(1, 2, 3, 4)
+
+tests/test_pysnooper.py:1282: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_pysnooper.py:1282: in test_var_order
+    result = f(1, 2, 3, 4)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a90f70>
+local_reprs = OrderedDict([('normalize', 'False'), ('string_io', '<_io.StringIO object at 0x1039d3820>'), ('f', '<function test_var_order.<locals>.f at 0x103a0e9d0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________________ test_indentation _______________________________
+
+    def test_indentation():
+        from .samples import indentation, recursion
+>       assert_sample_output(indentation)
+
+tests/test_pysnooper.py:1335: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+module = <module 'tests.samples.indentation' from '/Users/estebangarrido10/PySnooper_tesis/rope_pruebas/_trabajo/09_extract_con_locals/tests/samples/indentation.py'>
+
+    def assert_sample_output(module):
+        with mini_toolbox.OutputCapturer(stdout=False,
+                                         stderr=True) as output_capturer:
+            module.main()
+    
+        placeholder_time = '00:00:00.000000'
+        time_pattern = '[0-9:.]{15}'
+    
+        def normalise(out):
+            out = re.sub(time_pattern, placeholder_time, out).strip()
+            out = re.sub(
+                r'^( *)Source path:\.\.\. .*$',
+                r'\1Source path:... Whatever',
+                out,
+                flags=re.MULTILINE
+            )
+            return out
+    
+    
+        output = output_capturer.string_io.getvalue()
+    
+        try:
+>           assert (
+                    normalise(output) ==
+                    normalise(module.expected_output)
+            )
+E           AssertionError: assert 'Source path:...:00:00.000000' == 'Source path:...:00:00.000000'
+E             
+E               Source path:... Whatever
+E             - 00:00:00.000000 call         5 def main():
+E             - 00:00:00.000000 line         6     f2()
+E             -     00:00:00.000000 call         9 def f2():
+E             -     00:00:00.000000 line        10     f3()
+E             -         Source path:... Whatever...
+E             
+E             ...Full output truncated (33 lines hidden), use '-vv' to show
+
+tests/utils.py:424: AssertionError
+----------------------------- Captured stdout call -----------------------------
+
+
+Actual Output:
+
+                                                                                                                                                        Source path:... /Users/estebangarrido10/PySnooper_tesis/rope_pruebas/_trabajo/09_extract_con_locals/tests/samples/indentation.py
+                                                                                                                                                        22:45:52.930190 call         5 def main():
+                                                                                                                                                        22:45:52.930247 line         6     f2()
+                                                                                                                                                            22:45:52.930256 call         9 def f2():
+                                                                                                                                                            22:45:52.930262 line        10     f3()
+                                                                                                                                                                Source path:... /Users/estebangarrido10/PySnooper_tesis/rope_pruebas/_trabajo/09_extract_con_locals/tests/samples/indentation.py
+                                                                                                                                                                22:45:52.930274 call        18 def f4():
+                                                                                                                                                                22:45:52.930282 line        19     f5()
+                                                                                                                                                                    22:45:52.930288 call        22 def f5():
+                                                                                                                                                                    22:45:52.930293 line        23     pass
+                                                                                                                                                                    22:45:52.930298 return      23     pass
+                                                                                                                                                                    Return value:.. None
+                                                                                                                                                                22:45:52.930308 return      19     f5()
+                                                                                                                                                                Return value:.. None
+                                                                                                                                                                Elapsed time: 00:00:00.000046
+                                                                                                                                                            22:45:52.930326 return      10     f3()
+                                                                                                                                                            Return value:.. None
+                                                                                                                                                        22:45:52.930334 return       6     f2()
+                                                                                                                                                        Return value:.. None
+                                                                                                                                                        Elapsed time: 00:00:00.000156
+
+________________________________ test_exception ________________________________
+
+    def test_exception():
+        string_io = io.StringIO()
+        @pysnooper.snoop(string_io, color=False)
+        def f():
+            x = 8
+            raise MemoryError
+    
+        with pytest.raises(MemoryError):
+>           f()
+
+tests/test_pysnooper.py:1892: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1889: in f
+    raise MemoryError
+tests/test_pysnooper.py:1889: in f
+    raise MemoryError
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b42430>
+local_reprs = OrderedDict([('x', '8')]), old_local_reprs = OrderedDict()
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________________ test_generator ________________________________
+
+    def test_generator():
+        string_io = io.StringIO()
+        original_tracer = sys.gettrace()
+        original_tracer_active = lambda: (sys.gettrace() is original_tracer)
+    
+    
+        @pysnooper.snoop(string_io, color=False)
+        def f(x1):
+            assert not original_tracer_active()
+            x2 = (yield x1)
+            assert not original_tracer_active()
+            x3 = 'foo'
+            assert not original_tracer_active()
+            x4 = (yield 2)
+            assert not original_tracer_active()
+            return
+    
+    
+        assert original_tracer_active()
+        generator = f(0)
+        assert original_tracer_active()
+>       first_item = next(generator)
+
+tests/test_pysnooper.py:1365: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:346: in generator_wrapper
+    outgoing = method(incoming)
+tests/test_pysnooper.py:1350: in f
+    @pysnooper.snoop(string_io, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a3e5e0>
+local_reprs = OrderedDict([('x1', '0'), ('original_tracer_active', '<function test_generator.<locals>.<lambda> at 0x103a28d30>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_custom_repr[True] ____________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_custom_repr(normalize):
+        string_io = io.StringIO()
+    
+        def large(l):
+            return isinstance(l, list) and len(l) > 5
+    
+        def print_list_size(l):
+            return 'list(size={})'.format(len(l))
+    
+        def print_dict(d):
+            return 'dict(keys={})'.format(sorted(list(d.keys())))
+    
+        def evil_condition(x):
+            return large(x) or isinstance(x, dict)
+    
+        @pysnooper.snoop(string_io, custom_repr=(
+            (large, print_list_size),
+            (dict, print_dict),
+            (evil_condition, lambda x: 'I am evil')),
+                normalize=normalize, color=False)
+        def sum_to_x(x):
+            l = list(range(x))
+            a = {'1': 1, '2': 2}
+            return sum(l)
+    
+>       result = sum_to_x(10000)
+
+tests/test_pysnooper.py:1453: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1443: in sum_to_x
+    @pysnooper.snoop(string_io, custom_repr=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b67490>
+local_reprs = OrderedDict([('x', '10000')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________________ test_custom_repr[False] ____________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_custom_repr(normalize):
+        string_io = io.StringIO()
+    
+        def large(l):
+            return isinstance(l, list) and len(l) > 5
+    
+        def print_list_size(l):
+            return 'list(size={})'.format(len(l))
+    
+        def print_dict(d):
+            return 'dict(keys={})'.format(sorted(list(d.keys())))
+    
+        def evil_condition(x):
+            return large(x) or isinstance(x, dict)
+    
+        @pysnooper.snoop(string_io, custom_repr=(
+            (large, print_list_size),
+            (dict, print_dict),
+            (evil_condition, lambda x: 'I am evil')),
+                normalize=normalize, color=False)
+        def sum_to_x(x):
+            l = list(range(x))
+            a = {'1': 1, '2': 2}
+            return sum(l)
+    
+>       result = sum_to_x(10000)
+
+tests/test_pysnooper.py:1453: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1443: in sum_to_x
+    @pysnooper.snoop(string_io, custom_repr=(
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1039c3df0>
+local_reprs = OrderedDict([('x', '10000')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________ test_custom_repr_single[True] _________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_custom_repr_single(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, custom_repr=(list, lambda l: 'foofoo!'),
+                         normalize=normalize, color=False)
+        def sum_to_x(x):
+            l = list(range(x))
+            return 7
+    
+>       result = sum_to_x(10000)
+
+tests/test_pysnooper.py:1485: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1479: in sum_to_x
+    @pysnooper.snoop(string_io, custom_repr=(list, lambda l: 'foofoo!'),
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a240a0>
+local_reprs = OrderedDict([('x', '10000')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________ test_custom_repr_single[False] ________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_custom_repr_single(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, custom_repr=(list, lambda l: 'foofoo!'),
+                         normalize=normalize, color=False)
+        def sum_to_x(x):
+            l = list(range(x))
+            return 7
+    
+>       result = sum_to_x(10000)
+
+tests/test_pysnooper.py:1485: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1479: in sum_to_x
+    @pysnooper.snoop(string_io, custom_repr=(list, lambda l: 'foofoo!'),
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b0be80>
+local_reprs = OrderedDict([('x', '10000')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________________ test_class[True] _______________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1537: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1530: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cc0730>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class.<locals>.MyClass object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_class[False] _______________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1537: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1530: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x1039d6310>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class.<locals>.MyClass object at 0x103b42dc0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________ test_class_with_decorated_method[True] ____________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_decorated_method(normalize):
+        string_io = io.StringIO()
+    
+        def decorator(function):
+            def wrapper(*args, **kwargs):
+                result = function(*args, **kwargs)
+                return result
+            return wrapper
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            @decorator
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1585: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1577: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a45850>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_decorated_method.<locals>.MyClass object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+___________________ test_class_with_decorated_method[False] ____________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_decorated_method(normalize):
+        string_io = io.StringIO()
+    
+        def decorator(function):
+            def wrapper(*args, **kwargs):
+                result = function(*args, **kwargs)
+                return result
+            return wrapper
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            @decorator
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1585: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1577: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103cb4df0>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_decorated_method.<locals>.MyClass object at 0x103cb4fa0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______ test_class_with_decorated_method_and_snoop_applied_to_method[True] ______
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_decorated_method_and_snoop_applied_to_method(normalize):
+        string_io = io.StringIO()
+    
+        def decorator(function):
+            def wrapper(*args, **kwargs):
+                result = function(*args, **kwargs)
+                return result
+            return wrapper
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            @decorator
+            @pysnooper.snoop(string_io, normalize=normalize, color=False)
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1635: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1626: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a90c70>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_decorated_..._snoop_applied_to_method.<locals>.MyClass object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____ test_class_with_decorated_method_and_snoop_applied_to_method[False] ______
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_decorated_method_and_snoop_applied_to_method(normalize):
+        string_io = io.StringIO()
+    
+        def decorator(function):
+            def wrapper(*args, **kwargs):
+                result = function(*args, **kwargs)
+                return result
+            return wrapper
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self.x = 7
+    
+            @decorator
+            @pysnooper.snoop(string_io, normalize=normalize, color=False)
+            def my_method(self, foo):
+                y = 8
+                return y + self.x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1635: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1626: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c2b430>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_decorated_...to_method.<locals>.MyClass object at 0x103c2b8b0>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________ test_class_with_property[True] ________________________
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_property(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self._x = 0
+    
+            def plain_method(self):
+                pass
+    
+            @property
+            def x(self):
+                self.plain_method()
+                return self._x
+    
+            @x.setter
+            def x(self, value):
+                self.plain_method()
+                self._x = value
+    
+            @x.deleter
+            def x(self):
+                self.plain_method()
+                del self._x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1701: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1680: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x10397ffd0>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_property.<locals>.MyClass object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_______________________ test_class_with_property[False] ________________________
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_class_with_property(normalize):
+        string_io = io.StringIO()
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(object):
+            def __init__(self):
+                self._x = 0
+    
+            def plain_method(self):
+                pass
+    
+            @property
+            def x(self):
+                self.plain_method()
+                return self._x
+    
+            @x.setter
+            def x(self, value):
+                self.plain_method()
+                self._x = value
+    
+            @x.deleter
+            def x(self):
+                self.plain_method()
+                del self._x
+    
+>       instance = MyClass()
+
+tests/test_pysnooper.py:1701: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1680: in __init__
+    def __init__(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a36130>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_class_with_property.<locals>.MyClass object at 0x103ac4f40>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____ test_snooping_on_class_does_not_cause_base_class_to_be_snooped[True] _____
+
+normalize = True
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_snooping_on_class_does_not_cause_base_class_to_be_snooped(normalize):
+        string_io = io.StringIO()
+    
+        class UnsnoopedBaseClass(object):
+            def __init__(self):
+                self.method_on_base_class_was_called = False
+    
+            def method_on_base_class(self):
+                self.method_on_base_class_was_called = True
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(UnsnoopedBaseClass):
+            def method_on_child_class(self):
+                self.method_on_base_class()
+    
+        instance = MyClass()
+    
+        assert not instance.method_on_base_class_was_called
+>       instance.method_on_child_class()
+
+tests/test_pysnooper.py:1774: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1768: in method_on_child_class
+    def method_on_child_class(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c1db50>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_snooping_on_class_doe...base_class_to_be_snooped.<locals>.MyClass object>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____ test_snooping_on_class_does_not_cause_base_class_to_be_snooped[False] _____
+
+normalize = False
+
+    @pytest.mark.parametrize("normalize", (True, False))
+    def test_snooping_on_class_does_not_cause_base_class_to_be_snooped(normalize):
+        string_io = io.StringIO()
+    
+        class UnsnoopedBaseClass(object):
+            def __init__(self):
+                self.method_on_base_class_was_called = False
+    
+            def method_on_base_class(self):
+                self.method_on_base_class_was_called = True
+    
+        @pysnooper.snoop(string_io, normalize=normalize, color=False)
+        class MyClass(UnsnoopedBaseClass):
+            def method_on_child_class(self):
+                self.method_on_base_class()
+    
+        instance = MyClass()
+    
+        assert not instance.method_on_base_class_was_called
+>       instance.method_on_child_class()
+
+tests/test_pysnooper.py:1774: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1768: in method_on_child_class
+    def method_on_child_class(self):
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b7ba60>
+local_reprs = OrderedDict([('self', '<tests.test_pysnooper.test_snooping_on_class_doe...e_snooped.<locals>.MyClass object at 0x103b7b280>')])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+________________________________ test_normalize ________________________________
+
+    def test_normalize():
+        string_io = io.StringIO()
+    
+        class A:
+            def __init__(self, a):
+                self.a = a
+    
+        @pysnooper.snoop(string_io, normalize=True, color=False)
+        def add():
+            a = A(19)
+            b = A(22)
+            res = a.a + b.a
+            return res
+    
+>       add()
+
+tests/test_pysnooper.py:1807: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1800: in add
+    @pysnooper.snoop(string_io, normalize=True, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103a91130>
+local_reprs = OrderedDict([('A', "<class 'tests.test_pysnooper.test_normalize.<locals>.A'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+____________________________ test_normalize_prefix _____________________________
+
+    def test_normalize_prefix():
+        string_io = io.StringIO()
+        _prefix = 'ZZZZ'
+    
+        class A:
+            def __init__(self, a):
+                self.a = a
+    
+        @pysnooper.snoop(string_io, normalize=True, prefix=_prefix, color=False)
+        def add():
+            a = A(19)
+            b = A(22)
+            res = a.a + b.a
+            return res
+    
+>       add()
+
+tests/test_pysnooper.py:1844: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+tests/test_pysnooper.py:1837: in add
+    @pysnooper.snoop(string_io, normalize=True, prefix=_prefix, color=False)
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b42040>
+local_reprs = OrderedDict([('A', "<class 'tests.test_pysnooper.test_normalize_prefix.<locals>.A'>")])
+old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+______________________________ test_valid_zipfile ______________________________
+
+    def test_valid_zipfile():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder, \
+                                        mini_toolbox.TempSysPathAdder(str(folder)):
+            module_name = 'my_valid_zip_module'
+            zip_name = 'valid.zip'
+            zip_base_path = mini_toolbox.pathlib.Path('ansible/modules')
+            python_file_path = folder / zip_name / zip_base_path / ('%s.py' % (module_name))
+            os.makedirs(str(folder / zip_name / zip_base_path))
+            try:
+                sys.path.insert(0, str(folder / zip_name / zip_base_path))
+                content = textwrap.dedent(u'''
+                    import pysnooper
+                    @pysnooper.snoop(color=False)
+                    def f(x):
+                        return x
+                ''')
+    
+                python_file_path.write_text(content)
+    
+                module = __import__(module_name)
+    
+                with zipfile.ZipFile(str(folder / 'foo_bar.zip'), 'w') as myZipFile:
+                    myZipFile.write(str(folder / zip_name / zip_base_path / ('%s.py' % (module_name))), \
+                                    '%s/%s.py' % (zip_base_path, module_name,), \
+                                    zipfile.ZIP_DEFLATED)
+    
+                python_file_path.unlink()
+                folder.joinpath(zip_name).rename(folder.joinpath('%s.delete' % (zip_name)))
+                folder.joinpath('foo_bar.zip').rename(folder.joinpath(zip_name))
+    
+                with mini_toolbox.OutputCapturer(stdout=False,
+                                                 stderr=True) as output_capturer:
+>                   result = getattr(module, 'f')(7)
+
+tests/test_pysnooper.py:2011: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+/var/folders/k_/fsm668d93fnc6932cv0ykpbh0000gn/T/pysnooper5826q1w3/valid.zip/ansible/modules/my_valid_zip_module.py:3: in f
+    ???
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b08fd0>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+_____________________________ test_invalid_zipfile _____________________________
+
+    def test_invalid_zipfile():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder, \
+                                        mini_toolbox.TempSysPathAdder(str(folder)):
+            module_name = 'my_invalid_zip_module'
+            zip_name = 'invalid.zip'
+            zip_base_path = mini_toolbox.pathlib.Path('invalid/modules/path')
+            python_file_path = folder / zip_name / zip_base_path / ('%s.py' % (module_name))
+            os.makedirs(str(folder / zip_name / zip_base_path))
+            try:
+                sys.path.insert(0, str(folder / zip_name / zip_base_path))
+                content = textwrap.dedent(u'''
+                    import pysnooper
+                    @pysnooper.snoop(color=False)
+                    def f(x):
+                        return x
+                ''')
+                python_file_path.write_text(content)
+    
+                module = __import__(module_name)
+    
+                with zipfile.ZipFile(str(folder / 'foo_bar.zip'), 'w') as myZipFile:
+                    myZipFile.write(str(folder / zip_name / zip_base_path / ('%s.py' % (module_name))), \
+                                    str(zip_base_path / ('%s.py' % (module_name,))), \
+                                    zipfile.ZIP_DEFLATED)
+    
+                python_file_path.unlink()
+                folder.joinpath(zip_name).rename(folder.joinpath('%s.delete' % (zip_name)))
+                folder.joinpath('foo_bar.zip').rename(folder.joinpath(zip_name))
+    
+                with mini_toolbox.OutputCapturer(stdout=False,
+                                             stderr=True) as output_capturer:
+>                   result = getattr(module, 'f')(7)
+
+tests/test_pysnooper.py:2062: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+/var/folders/k_/fsm668d93fnc6932cv0ykpbh0000gn/T/pysnoopero46ki2rf/invalid.zip/invalid/modules/path/my_invalid_zip_module.py:3: in f
+    ???
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103c08640>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+__________________________ test_valid_damaged_zipfile __________________________
+
+    def test_valid_damaged_zipfile():
+        with mini_toolbox.create_temp_folder(prefix='pysnooper') as folder, \
+                                        mini_toolbox.TempSysPathAdder(str(folder)):
+            module_name = 'my_damaged_module'
+            zip_name = 'damaged.zip'
+            zip_base_path = mini_toolbox.pathlib.Path('ansible/modules')
+            python_file_path = folder / zip_name / zip_base_path / ('%s.py' % (module_name))
+            os.makedirs(str(folder / zip_name / zip_base_path))
+            try:
+                sys.path.insert(0, str(folder / zip_name / zip_base_path))
+                content = textwrap.dedent(u'''
+                    import pysnooper
+                    @pysnooper.snoop(color=False)
+                    def f(x):
+                        return x
+                ''')
+                python_file_path.write_text(content)
+    
+                module = __import__(module_name)
+    
+                python_file_path.unlink()
+                folder.joinpath(zip_name).rename(folder.joinpath('%s.delete' % (zip_name)))
+    
+                folder.joinpath(zip_name).write_text(u'I am not a zip file')
+    
+                with mini_toolbox.OutputCapturer(stdout=False,
+                                             stderr=True) as output_capturer:
+>                   result = getattr(module, 'f')(7)
+
+tests/test_pysnooper.py:2109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pysnooper/tracer.py:337: in simple_wrapper
+    return function(*args, **kwargs)
+/var/folders/k_/fsm668d93fnc6932cv0ykpbh0000gn/T/pysnooperilij6pms/damaged.zip/ansible/modules/my_damaged_module.py:3: in f
+    ???
+pysnooper/tracer.py:518: in trace
+    self._report_variables(local_reprs, old_local_reprs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pysnooper.tracer.Tracer object at 0x103b274f0>
+local_reprs = OrderedDict([('x', '7')]), old_local_reprs = {}
+
+    def _report_variables(self, local_reprs, old_local_reprs):
+        for name, value_repr in local_reprs.items():
+            if name not in old_local_reprs:
+>               self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+                           '{newish_string}{_STYLE_NORMAL}{name} = '
+E                          KeyError: 'indent'
+
+pysnooper/tracer.py:586: KeyError
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_pysnooper.py:1911: ExceptionGroup requires Python 3.11+
+SKIPPED [1] tests/test_pysnooper.py:1941: ExceptionGroup requires Python 3.11+
+68 failed, 15 passed, 2 skipped in 1.46s

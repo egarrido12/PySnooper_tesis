@@ -1,0 +1,24 @@
+Renaming <string> to <text> - today 22:45:47 :
+
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -79,13 +79,13 @@
+     return r
+ 
+ 
+-def truncate(string, max_length):
+-    if (max_length is None) or (len(string) <= max_length):
+-        return string
++def truncate(text, max_length):
++    if (max_length is None) or (len(text) <= max_length):
++        return text
+     else:
+         left = (max_length - 3) // 2
+         right = max_length - 3 - left
+-        return u'{}...{}'.format(string[:left], string[-right:])
++        return u'{}...{}'.format(text[:left], text[-right:])
+ 
+ 
+ def format_exception(exc_type, exc_value):
+

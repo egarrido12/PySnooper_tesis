@@ -1,0 +1,89 @@
+Renaming <truncate> to <truncate_string> - today 22:45:43 :
+
+
+--- a/tests/test_multiple_files/test_multiple_files.py
++++ b/tests/test_multiple_files/test_multiple_files.py
+@@ -8,7 +8,7 @@
+ import os
+ import sys
+ 
+-from pysnooper.utils import truncate
++from pysnooper.utils import truncate_string
+ import pytest
+ 
+ import pysnooper
+
+--- a/tests/test_pysnooper.py
++++ b/tests/test_pysnooper.py
+@@ -10,7 +10,7 @@
+ import sys
+ import zipfile
+ 
+-from pysnooper.utils import truncate
++from pysnooper.utils import truncate_string
+ import pytest
+ 
+ import pysnooper
+@@ -1322,7 +1322,7 @@
+     max_length = 20
+     for i in range(max_length * 2):
+         string = i * 'a'
+-        truncated = truncate(string, max_length)
++        truncated = truncate_string(string, max_length)
+         if len(string) <= max_length:
+             assert string == truncated
+         else:
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -75,11 +75,11 @@
+     if normalize:
+         r = normalize_repr(r)
+     if max_length:
+-        r = truncate(r, max_length)
++        r = truncate_string(r, max_length)
+     return r
+ 
+ 
+-def truncate(string, max_length):
++def truncate_string(string, max_length):
+     if (max_length is None) or (len(string) <= max_length):
+         return string
+     else:
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -581,7 +581,7 @@
+         if event == 'exception':
+             exception = utils.format_exception(*arg[:2])
+             if self.max_variable_length:
+-                exception = utils.truncate(exception, self.max_variable_length)
++                exception = utils.truncate_string(exception, self.max_variable_length)
+             self.write('{indent}{_FOREGROUND_RED}Exception:..... '
+                        '{_STYLE_BRIGHT}{exception}'
+                        '{_STYLE_RESET_ALL}'.format(**locals()))
+
+--- a/tests/test_chinese.py
++++ b/tests/test_chinese.py
+@@ -8,7 +8,7 @@
+ import types
+ import sys
+ 
+-from pysnooper.utils import truncate
++from pysnooper.utils import truncate_string
+ import pytest
+ 
+ import pysnooper
+
+--- a/tests/test_not_implemented.py
++++ b/tests/test_not_implemented.py
+@@ -9,7 +9,7 @@
+ import os
+ import sys
+ 
+-from pysnooper.utils import truncate
++from pysnooper.utils import truncate_string
+ import pytest
+ 
+ import pysnooper
+

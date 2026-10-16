@@ -1,0 +1,38 @@
+Extract method <_report_variables> - today 22:45:51 :
+
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -515,15 +515,7 @@
+         newish_string = ('Starting var:.. ' if event == 'call' else
+                                                             'New var:....... ')
+ 
+-        for name, value_repr in local_reprs.items():
+-            if name not in old_local_reprs:
+-                self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+-                           '{newish_string}{_STYLE_NORMAL}{name} = '
+-                           '{value_repr}{_STYLE_RESET_ALL}'.format(**locals()))
+-            elif old_local_reprs[name] != value_repr:
+-                self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
+-                           'Modified var:.. {_STYLE_NORMAL}{name} = '
+-                           '{value_repr}{_STYLE_RESET_ALL}'.format(**locals()))
++        self._report_variables(local_reprs, old_local_reprs)
+ 
+         #                                                                     #
+         ### Finished newish and modified variables. ###########################
+@@ -587,3 +579,14 @@
+                        '{_STYLE_RESET_ALL}'.format(**locals()))
+ 
+         return self.trace
++
++    def _report_variables(self, local_reprs, old_local_reprs):
++        for name, value_repr in local_reprs.items():
++            if name not in old_local_reprs:
++                self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
++                           '{newish_string}{_STYLE_NORMAL}{name} = '
++                           '{value_repr}{_STYLE_RESET_ALL}'.format(**locals()))
++            elif old_local_reprs[name] != value_repr:
++                self.write('{indent}{_FOREGROUND_GREEN}{_STYLE_DIM}'
++                           'Modified var:.. {_STYLE_NORMAL}{name} = '
++                           '{value_repr}{_STYLE_RESET_ALL}'.format(**locals()))
+

@@ -1,0 +1,54 @@
+Renaming <CommonVariable> to <GenericVariable> - today 22:45:46 :
+
+
+--- a/pysnooper/variables.py
++++ b/pysnooper/variables.py
+@@ -50,7 +50,7 @@
+                                        self._fingerprint == other._fingerprint)
+ 
+ 
+-class CommonVariable(BaseVariable):
++class GenericVariable(BaseVariable):
+     def _items(self, main_value, normalize=False):
+         result = [(self.source, utils.get_shortish_repr(main_value, normalize=normalize))]
+         for key in self._safe_keys(main_value):
+@@ -83,7 +83,7 @@
+         raise NotImplementedError
+ 
+ 
+-class Attrs(CommonVariable):
++class Attrs(GenericVariable):
+     def _keys(self, main_value):
+         return itertools.chain(
+             getattr(main_value, '__dict__', ()),
+@@ -97,7 +97,7 @@
+         return getattr(main_value, key)
+ 
+ 
+-class Keys(CommonVariable):
++class Keys(GenericVariable):
+     def _keys(self, main_value):
+         return main_value.keys()
+ 
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -13,7 +13,7 @@
+ import threading
+ import traceback
+ 
+-from .variables import CommonVariable, Exploding, BaseVariable
++from .variables import GenericVariable, Exploding, BaseVariable
+ from . import utils, pycompat
+ if pycompat.PY2:
+     from io import open
+@@ -257,7 +257,7 @@
+         self._write = get_write_function(output, overwrite)
+ 
+         self.watch = [
+-            v if isinstance(v, BaseVariable) else CommonVariable(v)
++            v if isinstance(v, BaseVariable) else GenericVariable(v)
+             for v in utils.ensure_tuple(watch)
+          ] + [
+              v if isinstance(v, BaseVariable) else Exploding(v)
+

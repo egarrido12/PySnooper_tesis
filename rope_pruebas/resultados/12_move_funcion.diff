@@ -1,0 +1,63 @@
+Moving global <shitcode> - today 22:45:55 :
+
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -5,7 +5,6 @@
+ import re
+ import traceback
+ 
+-import sys
+ from .pycompat import ABC, string_types, collections_abc
+ 
+ def _check_methods(C, *methods):
+@@ -40,12 +39,6 @@
+     ValueError # IronPython weirdness.
+ )
+ 
+-
+-
+-def shitcode(s):
+-    return ''.join(
+-        (c if (0 < ord(c) < 256) else '?') for c in s
+-    )
+ 
+ 
+ def get_repr_function(item, custom_repr):
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -15,6 +15,7 @@
+ 
+ from .variables import CommonVariable, Exploding, BaseVariable
+ from . import utils, pycompat
++import pysnooper.pycompat
+ if pycompat.PY2:
+     from io import open
+ 
+@@ -160,7 +161,7 @@
+                 stderr.write(s)
+             except UnicodeEncodeError:
+                 # God damn Python 2
+-                stderr.write(utils.shitcode(s))
++                stderr.write(pysnooper.pycompat.shitcode(s))
+     elif is_path:
+         return FileWriter(output, overwrite).write
+     elif callable(output):
+
+--- a/pysnooper/pycompat.py
++++ b/pysnooper/pycompat.py
+@@ -7,6 +7,12 @@
+ import inspect
+ import sys
+ import datetime as datetime_module
++
++
++def shitcode(s):
++    return ''.join(
++        (c if (0 < ord(c) < 256) else '?') for c in s
++    )
+ 
+ PY3 = (sys.version_info[0] == 3)
+ PY2 = not PY3
+

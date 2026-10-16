@@ -1,0 +1,33 @@
+Renaming <_is_internal_frame> to <_is_pysnooper_frame> - today 22:45:44 :
+
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -369,7 +369,7 @@
+             return
+         thread_global.__dict__.setdefault('depth', -1)
+         calling_frame = inspect.currentframe().f_back
+-        if not self._is_internal_frame(calling_frame):
++        if not self._is_pysnooper_frame(calling_frame):
+             calling_frame.f_trace = self.trace
+             self.target_frames.add(calling_frame)
+ 
+@@ -408,7 +408,7 @@
+         #                                                                     #
+         ### Finished writing elapsed time. ####################################
+ 
+-    def _is_internal_frame(self, frame):
++    def _is_pysnooper_frame(self, frame):
+         return frame.f_code.co_filename == Tracer.__enter__.__code__.co_filename
+ 
+     def set_thread_info_padding(self, thread_info):
+@@ -431,7 +431,7 @@
+                 # trace function runs so incredibly often, therefore it's
+                 # crucial to hyper-optimize it for the common case.
+                 return None
+-            elif self._is_internal_frame(frame):
++            elif self._is_pysnooper_frame(frame):
+                 return None
+             else:
+                 _frame_candidate = frame
+

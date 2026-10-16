@@ -1,0 +1,66 @@
+Renaming <get_shortish_repr> to <get_short_repr> - today 22:45:42 :
+
+
+--- a/pysnooper/variables.py
++++ b/pysnooper/variables.py
+@@ -52,7 +52,7 @@
+ 
+ class CommonVariable(BaseVariable):
+     def _items(self, main_value, normalize=False):
+-        result = [(self.source, utils.get_shortish_repr(main_value, normalize=normalize))]
++        result = [(self.source, utils.get_short_repr(main_value, normalize=normalize))]
+         for key in self._safe_keys(main_value):
+             try:
+                 if key in self.exclude:
+@@ -62,7 +62,7 @@
+                 continue
+             result.append((
+                 '{}{}'.format(self.unambiguous_source, self._format_key(key)),
+-                utils.get_shortish_repr(value)
++                utils.get_short_repr(value)
+             ))
+         return result
+ 
+@@ -102,7 +102,7 @@
+         return main_value.keys()
+ 
+     def _format_key(self, key):
+-        return '[{}]'.format(utils.get_shortish_repr(key))
++        return '[{}]'.format(utils.get_short_repr(key))
+ 
+     def _get_value(self, main_value, key):
+         return main_value[key]
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -65,7 +65,7 @@
+     return DEFAULT_REPR_RE.sub('', item_repr)
+ 
+ 
+-def get_shortish_repr(item, custom_repr=(), max_length=None, normalize=False):
++def get_short_repr(item, custom_repr=(), max_length=None, normalize=False):
+     repr_function = get_repr_function(item, custom_repr)
+     try:
+         r = repr_function(item)
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -51,7 +51,7 @@
+     vars_order = (code.co_varnames + code.co_cellvars + code.co_freevars +
+                   tuple(frame.f_locals.keys()))
+ 
+-    result_items = [(key, utils.get_shortish_repr(value, custom_repr,
++    result_items = [(key, utils.get_short_repr(value, custom_repr,
+                                                   max_length, normalize))
+                     for key, value in frame.f_locals.items()]
+     result_items.sort(key=lambda key_value: vars_order.index(key_value[0]))
+@@ -568,7 +568,7 @@
+             thread_global.depth -= 1
+ 
+             if not ended_by_exception:
+-                return_value_repr = utils.get_shortish_repr(arg,
++                return_value_repr = utils.get_short_repr(arg,
+                                                             custom_repr=self.custom_repr,
+                                                             max_length=self.max_variable_length,
+                                                             normalize=self.normalize,
+

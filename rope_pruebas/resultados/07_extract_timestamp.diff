@@ -1,0 +1,50 @@
+Extract method <_make_timestamp> - today 22:45:48 :
+
+
+--- a/pysnooper/tracer.py
++++ b/pysnooper/tracer.py
+@@ -465,21 +465,7 @@
+ 
+         ### Making timestamp: #################################################
+         #                                                                     #
+-        if self.normalize:
+-            timestamp = ' ' * 15
+-        elif self.relative_time:
+-            try:
+-                start_time = self.start_times[frame]
+-            except KeyError:
+-                start_time = self.start_times[frame] = \
+-                                                 datetime_module.datetime.now()
+-            duration = datetime_module.datetime.now() - start_time
+-            timestamp = pycompat.timedelta_format(duration)
+-        else:
+-            timestamp = pycompat.time_isoformat(
+-                datetime_module.datetime.now().time(),
+-                timespec='microseconds'
+-            )
++        self._make_timestamp(frame)
+         #                                                                     #
+         ### Finished making timestamp. ########################################
+ 
+@@ -587,3 +573,20 @@
+                        '{_STYLE_RESET_ALL}'.format(**locals()))
+ 
+         return self.trace
++
++    def _make_timestamp(self, frame):
++        if self.normalize:
++            timestamp = ' ' * 15
++        elif self.relative_time:
++            try:
++                start_time = self.start_times[frame]
++            except KeyError:
++                start_time = self.start_times[frame] = \
++                                                 datetime_module.datetime.now()
++            duration = datetime_module.datetime.now() - start_time
++            timestamp = pycompat.timedelta_format(duration)
++        else:
++            timestamp = pycompat.time_isoformat(
++                datetime_module.datetime.now().time(),
++                timespec='microseconds'
++            )
+

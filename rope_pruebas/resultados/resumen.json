@@ -1,0 +1,232 @@
+{
+  "python": "3.9.6",
+  "rope": "1.14.0",
+  "linea_base": {
+    "returncode": 0,
+    "passed": 83,
+    "failed": 0,
+    "skipped": 2,
+    "errors": 0
+  },
+  "analisis": {
+    "errores": 31,
+    "ocurrencias": {
+      "get_shortish_repr": 6,
+      "truncate": 8,
+      "_is_internal_frame": 3,
+      "Tracer": 3,
+      "CommonVariable": 5
+    },
+    "definicion": "pysnooper/utils.py:68"
+  },
+  "refactorizaciones": [
+    {
+      "id": "02_rename_funcion",
+      "tipo": "Rename",
+      "descripcion": "utils.get_shortish_repr -> get_short_repr (usada en 3 módulos)",
+      "tiempo_rope_s": 0.134,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py",
+        "pysnooper/utils.py",
+        "pysnooper/variables.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "03_rename_funcion_tests",
+      "tipo": "Rename",
+      "descripcion": "utils.truncate -> truncate_string (también importada por los tests)",
+      "tiempo_rope_s": 0.162,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py",
+        "pysnooper/utils.py",
+        "tests/test_chinese.py",
+        "tests/test_multiple_files/test_multiple_files.py",
+        "tests/test_not_implemented.py",
+        "tests/test_pysnooper.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "04_rename_metodo",
+      "tipo": "Rename",
+      "descripcion": "Tracer._is_internal_frame -> _is_pysnooper_frame",
+      "tiempo_rope_s": 0.139,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "05_rename_clase",
+      "tipo": "Rename",
+      "descripcion": "variables.CommonVariable -> GenericVariable (clase base con subclases)",
+      "tiempo_rope_s": 0.134,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py",
+        "pysnooper/variables.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "06_rename_parametro",
+      "tipo": "Rename",
+      "descripcion": "parámetro string de truncate -> text",
+      "tiempo_rope_s": 0.06,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/utils.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "07_extract_timestamp",
+      "tipo": "Extract Method",
+      "descripcion": "bloque \"Making timestamp\" de Tracer.trace -> _make_timestamp",
+      "tiempo_rope_s": 0.173,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py"
+      ],
+      "tests": {
+        "returncode": 1,
+        "passed": 15,
+        "failed": 68,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "ROMPE TESTS"
+    },
+    {
+      "id": "08_extract_decorador",
+      "tipo": "Extract Method",
+      "descripcion": "bloque \"misplaced function definition\" -> _skip_decorator_lines (2 valores de retorno)",
+      "tiempo_rope_s": 0.054,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py"
+      ],
+      "tests": {
+        "returncode": 1,
+        "passed": 43,
+        "failed": 40,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "ROMPE TESTS"
+    },
+    {
+      "id": "09_extract_con_locals",
+      "tipo": "Extract Method",
+      "descripcion": "bloque que usa .format(**locals()) -> _report_variables (caso límite)",
+      "tiempo_rope_s": 0.174,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/tracer.py"
+      ],
+      "tests": {
+        "returncode": 1,
+        "passed": 15,
+        "failed": 68,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "ROMPE TESTS"
+    },
+    {
+      "id": "10_extract_control",
+      "tipo": "Extract Method",
+      "descripcion": "control sin locals(): try/except de get_shortish_repr -> _safe_repr",
+      "tiempo_rope_s": 0.007,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/utils.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "11_inline_funcion",
+      "tipo": "Inline",
+      "descripcion": "inline de utils.normalize_repr en get_shortish_repr",
+      "tiempo_rope_s": 0.047,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/utils.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    },
+    {
+      "id": "12_move_funcion",
+      "tipo": "Move",
+      "descripcion": "mover utils.shitcode a pycompat",
+      "tiempo_rope_s": 0.096,
+      "estado_rope": "aplicada",
+      "archivos_modificados": [
+        "pysnooper/pycompat.py",
+        "pysnooper/tracer.py",
+        "pysnooper/utils.py"
+      ],
+      "tests": {
+        "returncode": 0,
+        "passed": 83,
+        "failed": 0,
+        "skipped": 2,
+        "errors": 0
+      },
+      "veredicto": "COMPORTAMIENTO PRESERVADO"
+    }
+  ]
+}

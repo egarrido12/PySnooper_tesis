@@ -1,0 +1,30 @@
+Extract method <_safe_repr> - today 22:45:53 :
+
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -67,15 +67,19 @@
+ 
+ def get_shortish_repr(item, custom_repr=(), max_length=None, normalize=False):
+     repr_function = get_repr_function(item, custom_repr)
+-    try:
+-        r = repr_function(item)
+-    except Exception:
+-        r = 'REPR FAILED'
++    r = _safe_repr(repr_function, item)
+     r = r.replace('\r', '').replace('\n', '')
+     if normalize:
+         r = normalize_repr(r)
+     if max_length:
+         r = truncate(r, max_length)
++    return r
++
++def _safe_repr(repr_function, item):
++    try:
++        r = repr_function(item)
++    except Exception:
++        r = 'REPR FAILED'
+     return r
+ 
+ 
+

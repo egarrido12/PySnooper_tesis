@@ -1,0 +1,27 @@
+Inline method <normalize_repr> - today 22:45:54 :
+
+
+--- a/pysnooper/utils.py
++++ b/pysnooper/utils.py
+@@ -60,11 +60,6 @@
+ DEFAULT_REPR_RE = re.compile(r' at 0x[a-f0-9A-F]{4,}')
+ 
+ 
+-def normalize_repr(item_repr):
+-    """Remove memory address (0x...) from a default python repr"""
+-    return DEFAULT_REPR_RE.sub('', item_repr)
+-
+-
+ def get_shortish_repr(item, custom_repr=(), max_length=None, normalize=False):
+     repr_function = get_repr_function(item, custom_repr)
+     try:
+@@ -73,7 +68,7 @@
+         r = 'REPR FAILED'
+     r = r.replace('\r', '').replace('\n', '')
+     if normalize:
+-        r = normalize_repr(r)
++        r = DEFAULT_REPR_RE.sub('', r)
+     if max_length:
+         r = truncate(r, max_length)
+     return r
+
